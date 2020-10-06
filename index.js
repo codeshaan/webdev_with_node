@@ -8,6 +8,10 @@ const formidable = require("formidable");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// using cookie-parser
+// app.use(require("cookie-parser")());
+app.use(require("cookie-parser")("mysecret"));
+
 app.set("port", process.env.PORT || 3000);
 
 // importing handlebars and setting the defualt layout
@@ -96,12 +100,37 @@ app.get("/section", (req, res) => {
 	res.render("sections");
 });
 
+// form handling routes
+
 app.get("/newsletter", (req, res) => {
 	res.render("newsletter");
 });
 
 app.get("/form", (req, res) => {
 	res.render("form");
+
+	res.cookie("page", "form");
+	res.cookie("signed_page", "form_signed", { signed: true });
+
+	// signed cookies
+	console.log(req.signedCookies);
+	// unsigned cookies
+	console.log(req.cookies);
+});
+
+app.get("/signup", (req, res) => {
+	res.render("signup/signup");
+});
+
+app.post("/signup-process", (req, res) => {
+	new formidable.IncomingForm().parse(req, (err, fields, file) => {
+		res.render("signup-process", {
+			form: req.query.form,
+			name: fields.name,
+			email: fields.email,
+			file: file,
+		});
+	});
 });
 
 app.post("/form-success", (req, res) => {
