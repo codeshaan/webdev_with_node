@@ -1,14 +1,27 @@
 // importing express and initializing app
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
-const path = require("path");
+const formidable = require("formidable");
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("port", process.env.PORT || 3000);
 
 // importing handlebars and setting the defualt layout
 const handlebars = require("express3-handlebars").create({
 	defaultLayout: "main",
+	helpers: {
+		section: function (name, options) {
+			if (!this._sections) this._sections = {};
+
+			this._sections[name] = options.fn(name);
+
+			return null;
+		},
+	},
 	// partialsDir: path.join(__dirname + "/views/partials/"),
 });
 
@@ -77,6 +90,34 @@ app.use((req, res, next) => {
 app.get("/about", (req, res) => {
 	res.render("about", { block: block });
 	console.log(res);
+});
+
+app.get("/section", (req, res) => {
+	res.render("sections");
+});
+
+app.get("/newsletter", (req, res) => {
+	res.render("newsletter");
+});
+
+app.get("/form", (req, res) => {
+	res.render("form");
+});
+
+app.post("/form-success", (req, res) => {
+	new formidable.IncomingForm().parse(req, (err, fields, files) => {
+		res.render("form-success", {
+			fields,
+		});
+	});
+});
+
+app.get("/nursery", (req, res) => {
+	res.render("nursery-rhyme");
+});
+
+app.get("/myself", (req, res) => {
+	res.render("myself");
 });
 
 app.get("*", (req, res) => {

@@ -1,0 +1,37 @@
+
+{{#section 'head'}}
+  <script id="nurseryRhymeTemplate" type="text/x-handlebars-template">
+    Marry had a little <b>\{{ animal }}</b>, its <b>\{{ bodyPart }}</b>
+    was <b>\{{ adjective }}</b> as <b>\{{ noun }}</b>.
+  </script>
+{{/section}}
+
+<div id="nurseryRhyme">Click a button...</div> 
+
+<hr>
+<button id="btnNurseryRhyme">Generate nursery rhyme</button>
+<button id="btnNurseryRhymeAjax">Generate a nursery rhyme from ajax</button>
+
+
+{{#section 'script'}}
+
+  <script src="/handlebars.js"></script>
+  
+  <script>
+    window.addEventListener('load', () => {
+      const nurseryRhymeTemplate = Handlebars.compile(document.querySelector('#nurseryRhymeTemplate').innerHTML)
+      const nurseryRhyme = document.querySelector("#nurseryRhyme");
+
+      document.querySelector("#btnNurseryRhyme").addEventListener('click', (e) => {
+        e.preventDefault();
+        nurseryRhyme.innerHTML = nurseryRhymeTemplate({
+          animal: 'Basilisk',
+          bodyPart: 'tail',
+          adjective: "sharp",
+          noun: 'a needle'
+        });
+      });
+    });
+  </script>
+
+{{/section}}

@@ -1,0 +1,27 @@
+<button>click here</button>
+
+<p id="output"></p>
+
+
+{{#section 'script'}}
+  <script id="myself" type="text/x-handlebars-template">
+    My name is \{{ name }}. I am \{{ age }} years old. I study in class \{{ std }}
+  </script>
+
+  <script src="/handlebars.js"></script>
+
+  <script>
+    const template = Handlebars.compile(document.querySelector("#myself").innerHTML);
+    const btn = document.querySelector("button");
+    const output = document.querySelector("#output");
+
+    btn.addEventListener('click', () => {
+      output.innerHTML += template({
+        name: 'Shaan Alam',
+        age: 17,
+        std: "XIIA"
+      })
+    })
+  </script>
+
+{{/section}}
